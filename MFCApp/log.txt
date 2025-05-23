@@ -24,3 +24,16 @@
 [Fri May 23 12:00:18 2025] [INFO] Spanning tree found with 2 components
 [Fri May 23 12:00:31 2025] [INFO] Spanning tree saved to file: C:\Users\Huisan\Desktop\spanning_tree2.txt
 [Fri May 23 12:01:19 2025] [INFO] Graph instance created
+[Fri May 23 12:25:35 2025] [INFO] Graph instance created
+[Fri May 23 12:25:42 2025] [INFO] Graph instance created
+[Fri May 23 12:25:48 2025] [INFO] Spanning tree found with 1 components
+[Fri May 23 12:26:00 2025] [INFO] Spanning tree saved to file: C:\Users\Huisan\Desktop\spanning_tree.txt
+[Fri May 23 12:26:27 2025] [INFO] Graph instance created
+[Fri May 23 12:26:50 2025] [INFO] Graph instance created
+[Fri May 23 12:27:24 2025] [INFO] Graph instance created
+[Fri May 23 12:27:34 2025] [INFO] Spanning tree found with 1 components
+[Fri May 23 12:28:57 2025] [INFO] Graph instance created
+[Fri May 23 12:29:01 2025] [INFO] Spanning tree found with 1 components
+[Fri May 23 12:29:30 2025] [INFO] Graph instance created
+[Fri May 23 12:29:35 2025] [INFO] Spanning tree found with 1 components
+[Fri May 23 12:30:28 2025] [INFO] Spanning tree saved to file: C:\Users\Huisan\Desktop\spanning_tree.txt

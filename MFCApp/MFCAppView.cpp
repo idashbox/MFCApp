@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(CMFCAppView, CView)
 	ON_COMMAND(ID_GRAPH_SAVE_SPANNING_TREE, &CMFCAppView::OnGraphSaveSpanningTree)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+    ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // Создание или уничтожение CMFCAppView
@@ -149,54 +150,95 @@ void CMFCAppView::OnGraphSaveSpanningTree() {
 }
 
 void CMFCAppView::OnDraw(CDC* pDC) {
-	CMFCAppDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc) return;
+    CMFCAppDoc* pDoc = GetDocument();
+    ASSERT_VALID(pDoc);
+    if (!pDoc) return;
 
-	CFont font;
-	font.CreatePointFont(100, _T("Arial"));
-	CFont* pOldFont = pDC->SelectObject(&font);
+    CRect rect;
+    GetClientRect(&rect);
+    int width = rect.Width();
+    int height = rect.Height();
 
-	CRect rect;
-	GetClientRect(&rect);
-	int y = 20;
+    // Конфигурация отрисовки
+    const int NODE_RADIUS = 25;
+    const int SPACING = 100;
+    const COLORREF NODE_COLOR = RGB(100, 200, 100);
+    const COLORREF EDGE_COLOR = RGB(50, 50, 50);
+    const COLORREF SPANNING_EDGE_COLOR = RGB(200, 50, 50);
 
-	// Отрисовка исходного графа
-	pDC->SetTextColor(RGB(0, 0, 0));
-	pDC->TextOut(10, y, _T("Исходный граф:"));
-	y += 30;
+    // Рассчет позиций нод
+    std::map<int, CPoint> nodePositions;
+    int count = 0;
+    int cols = sqrt(pDoc->GetGraph().getAdjacencyList().size()) + 1;
 
-	for (const auto& [vertex, neighbors] : pDoc->GetGraph().getAdjacencyList()) {
-		CString str;
-		str.Format(_T("Вершина %d:"), vertex);
-		pDC->TextOut(20, y, str);
+    for (const auto& [vertex, _] : pDoc->GetGraph().getAdjacencyList()) {
+        int row = count / cols;
+        int col = count % cols;
+        nodePositions[vertex] = CPoint(
+            SPACING + col * (width - 2 * SPACING) / cols,
+            SPACING + row * (height - 2 * SPACING) / cols
+        );
+        count++;
+    }
 
-		CString connections;
-		for (int n : neighbors) {
-			CString temp;
-			temp.Format(_T("%d "), n);
-			connections += temp;
-		}
-		pDC->TextOut(40, y + 20, connections);
-		y += 40;
-	}
+    // Отрисовка ребер исходного графа
+    CPen edgePen(PS_SOLID, 1, EDGE_COLOR);
+    CPen* oldPen = pDC->SelectObject(&edgePen);
 
-	// Отрисовка остовного дерева
-	if (pDoc->HasSpanningTree()) {
-		y += 40;
-		pDC->SetTextColor(RGB(0, 0, 255));
-		pDC->TextOut(10, y, _T("Остовное дерево:"));
-		y += 30;
+    for (const auto& [vertex, neighbors] : pDoc->GetGraph().getAdjacencyList()) {
+        CPoint start = nodePositions[vertex];
+        for (int neighbor : neighbors) {
+            CPoint end = nodePositions[neighbor];
+            pDC->MoveTo(start);
+            pDC->LineTo(end);
+        }
+    }
 
-		for (const auto& edge : pDoc->GetSpanningTree()) {
-			CString str;
-			str.Format(_T("%d - %d"), edge.first, edge.second);
-			pDC->TextOut(20, y, str);
-			y += 20;
-		}
-	}
+    // Отрисовка остовного дерева
+    if (pDoc->HasSpanningTree()) {
+        CPen spanPen(PS_SOLID, 3, SPANNING_EDGE_COLOR);
+        pDC->SelectObject(&spanPen);
 
-	pDC->SelectObject(pOldFont);
+        for (const auto& edge : pDoc->GetSpanningTree()) {
+            CPoint start = nodePositions[edge.first];
+            CPoint end = nodePositions[edge.second];
+            pDC->MoveTo(start);
+            pDC->LineTo(end);
+        }
+    }
+
+    // Отрисовка нод
+    CBrush nodeBrush(NODE_COLOR);
+    CBrush* oldBrush = pDC->SelectObject(&nodeBrush);
+
+    for (const auto& [vertex, pos] : nodePositions) {
+        // Рисуем круг
+        pDC->Ellipse(
+            pos.x - NODE_RADIUS,
+            pos.y - NODE_RADIUS,
+            pos.x + NODE_RADIUS,
+            pos.y + NODE_RADIUS
+        );
+
+        // Текст ноды
+        CString label;
+        label.Format(_T("%d"), vertex);
+        pDC->SetBkMode(TRANSPARENT);
+        pDC->TextOut(
+            pos.x - NODE_RADIUS / 2,
+            pos.y - NODE_RADIUS / 2,
+            label
+        );
+    }
+
+    // Восстановление контекста
+    pDC->SelectObject(oldPen);
+    pDC->SelectObject(oldBrush);
+}
+
+void CMFCAppView::OnSize(UINT nType, int cx, int cy) {
+    CView::OnSize(nType, cx, cy);
+    Invalidate(); // Перерисовать при изменении размеров
 }
 #endif //_DEBUG
 

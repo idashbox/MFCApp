@@ -44,6 +44,7 @@ protected:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnGraphFindSpanningTree();
 	afx_msg void OnGraphSaveSpanningTree();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	DECLARE_MESSAGE_MAP()
 };
 
