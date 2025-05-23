@@ -1,0 +1,9 @@
+[Fri May 23 11:38:21 2025] [INFO] Graph instance created
+[Fri May 23 11:38:27 2025] [INFO] Graph instance created
+[Fri May 23 11:38:27 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph.txt with 2 vertices
+[Fri May 23 11:39:01 2025] [INFO] Graph instance created
+[Fri May 23 11:39:06 2025] [INFO] Graph instance created
+[Fri May 23 11:39:06 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph.txt with 0 vertices
+[Fri May 23 11:44:06 2025] [INFO] Graph instance created
+[Fri May 23 11:44:18 2025] [INFO] Graph instance created
+[Fri May 23 11:44:18 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph.txt with 0 vertices
