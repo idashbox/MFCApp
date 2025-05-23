@@ -7,3 +7,20 @@
 [Fri May 23 11:44:06 2025] [INFO] Graph instance created
 [Fri May 23 11:44:18 2025] [INFO] Graph instance created
 [Fri May 23 11:44:18 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph.txt with 0 vertices
+[Fri May 23 11:50:18 2025] [INFO] Graph instance created
+[Fri May 23 11:50:43 2025] [INFO] Graph instance created
+[Fri May 23 11:51:50 2025] [INFO] Graph instance created
+[Fri May 23 11:51:53 2025] [INFO] Graph instance created
+[Fri May 23 11:51:53 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph.txt with 4 vertices
+[Fri May 23 11:52:08 2025] [INFO] Graph instance created
+[Fri May 23 11:52:08 2025] [INFO] Graph loaded from file: C:\Users\Huisan\Desktop\graph2.txt with 3 vertices
+[Fri May 23 11:56:02 2025] [INFO] Graph instance created
+[Fri May 23 11:59:16 2025] [INFO] Graph instance created
+[Fri May 23 11:59:21 2025] [WARNING] Empty graph, spanning tree is not possible
+[Fri May 23 11:59:29 2025] [INFO] Graph instance created
+[Fri May 23 11:59:36 2025] [INFO] Spanning tree found with 1 components
+[Fri May 23 11:59:48 2025] [INFO] Spanning tree saved to file: C:\Users\Huisan\Desktop\spanning_tree.txt
+[Fri May 23 12:00:14 2025] [INFO] Graph instance created
+[Fri May 23 12:00:18 2025] [INFO] Spanning tree found with 2 components
+[Fri May 23 12:00:31 2025] [INFO] Spanning tree saved to file: C:\Users\Huisan\Desktop\spanning_tree2.txt
+[Fri May 23 12:01:19 2025] [INFO] Graph instance created

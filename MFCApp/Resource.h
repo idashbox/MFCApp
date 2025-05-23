@@ -71,7 +71,8 @@
 #define IDS_FIND_TAB				302
 #define IDS_EXPLORER				305
 #define IDS_EDIT_MENU				306
-#define ID_GRAPH_FIND_SPANNING_TREE  32772
+#define ID_GRAPH_FIND_SPANNING_TREE 32772
+#define ID_GRAPH_SAVE_SPANNING_TREE 32773
 
 // Следующие стандартные значения для новых объектов
 //

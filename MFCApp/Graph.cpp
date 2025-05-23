@@ -28,36 +28,38 @@ void Graph::addEdge(int v1, int v2) {
 }
 
 void Graph::loadFromFile(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        log("Failed to open file: " + filename, "ERROR");
-        throw std::runtime_error("Failed to open file");
-    }
-
     adjacencyList.clear();
+    std::ifstream file(filename);
+    if (!file)
+        throw std::runtime_error("Не удалось открыть файл: " + filename);
+
     std::string line;
     while (std::getline(file, line)) {
         if (line.empty()) continue;
 
         std::istringstream iss(line);
         int vertex;
-        if (!(iss >> vertex)) {
-            log("Invalid vertex in file: " + line, "ERROR");
-            throw std::runtime_error("Invalid file format");
-        }
+        if (!(iss >> vertex))
+            throw std::runtime_error("Неверный формат вершины в строке: " + line);
 
         std::vector<int> neighbors;
         int adjVertex;
         while (iss >> adjVertex) {
             if (adjVertex == vertex) {
-                log("Self-loop detected for vertex " + std::to_string(vertex), "WARNING");
+                log("Обнаружена петля у вершины " + std::to_string(vertex), "WARNING");
+                continue;
+            }
+            if (std::find(neighbors.begin(), neighbors.end(), adjVertex) != neighbors.end()) {
+                log("Повторное ребро " + std::to_string(vertex) + "-" + std::to_string(adjVertex), "WARNING");
                 continue;
             }
             neighbors.push_back(adjVertex);
         }
         adjacencyList[vertex] = neighbors;
     }
-    log("Graph loaded from file: " + filename + " with " + std::to_string(adjacencyList.size()) + " vertices", "INFO");
+
+    if (adjacencyList.empty())
+        throw std::runtime_error("Файл не содержит данных о графе");
 }
 
 void Graph::saveToFile(const std::string& filename, const std::vector<std::pair<int, int>>& spanningTree) {

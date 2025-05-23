@@ -186,4 +186,12 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Desktop\graph.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="..\..\..\..\Desktop\graph2.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

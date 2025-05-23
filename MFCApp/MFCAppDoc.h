@@ -11,6 +11,7 @@ class CMFCAppDoc : public CDocument
 {
 private:
 	Graph m_Graph;
+	std::vector<std::pair<int, int>> m_SpanningTree;
 protected: // создать только из сериализации
 	CMFCAppDoc() noexcept;
 	DECLARE_DYNCREATE(CMFCAppDoc)
@@ -22,6 +23,13 @@ public:
 public:
 	Graph& GetGraph() { return m_Graph; }
 	const Graph& GetGraph() const { return m_Graph; }
+	void SetSpanningTree(const std::vector<std::pair<int, int>>& tree) {
+		m_SpanningTree = tree;
+		SetModifiedFlag(TRUE);
+		UpdateAllViews(NULL);
+	}
+	const std::vector<std::pair<int, int>>& GetSpanningTree() const { return m_SpanningTree; }
+	bool HasSpanningTree() const { return !m_SpanningTree.empty(); }
 
 // Переопределение
 public:

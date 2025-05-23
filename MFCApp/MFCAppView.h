@@ -43,6 +43,7 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnGraphFindSpanningTree();
+	afx_msg void OnGraphSaveSpanningTree();
 	DECLARE_MESSAGE_MAP()
 };
 

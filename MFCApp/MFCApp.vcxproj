@@ -252,6 +252,10 @@
   <ItemGroup>
     <None Include="res\MFCApp.rc2" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Desktop\graph.txt" />
+    <Text Include="..\..\..\..\Desktop\graph2.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

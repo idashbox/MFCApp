@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CMFCAppView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMFCAppView::OnFilePrintPreview)
 	ON_COMMAND(ID_GRAPH_FIND_SPANNING_TREE, &CMFCAppView::OnGraphFindSpanningTree)
+	ON_COMMAND(ID_GRAPH_SAVE_SPANNING_TREE, &CMFCAppView::OnGraphSaveSpanningTree)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 END_MESSAGE_MAP()
@@ -115,40 +116,87 @@ CMFCAppDoc* CMFCAppView::GetDocument() const // встроена неотлаж�
 void CMFCAppView::OnGraphFindSpanningTree() {
 	CMFCAppDoc* pDoc = GetDocument();
 	try {
-		auto tree = pDoc->GetGraph().findSpanningTree();
-		CFileDialog dlg(FALSE, _T("txt"), _T("spanning_tree.txt"));
-		if (dlg.DoModal() == IDOK) {
-			// Исправленное преобразование:
-			std::string filename = CT2CA(dlg.GetPathName());
-			pDoc->GetGraph().saveToFile(filename, tree);
-			AfxMessageBox(_T("Дерево сохранено!"));
-		}
+		auto spanningTree = pDoc->GetGraph().findSpanningTree();
+		pDoc->SetSpanningTree(spanningTree);
+		AfxMessageBox(_T("Остовное дерево найдено!"));
 	}
 	catch (const std::exception& e) {
 		AfxMessageBox(CString("Ошибка: ") + e.what());
 	}
 }
+
+void CMFCAppView::OnGraphSaveSpanningTree() {
+	CMFCAppDoc* pDoc = GetDocument();
+	if (!pDoc->HasSpanningTree()) {
+		AfxMessageBox(_T("Сначала найдите остовное дерево!"));
+		return;
+	}
+
+	CFileDialog dlg(FALSE, _T("txt"), _T("spanning_tree.txt"),
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		_T("Текстовые файлы (*.txt)|*.txt||"));
+
+	if (dlg.DoModal() == IDOK) {
+		try {
+			std::string filename = CT2CA(dlg.GetPathName());
+			pDoc->GetGraph().saveToFile(filename, pDoc->GetSpanningTree());
+			AfxMessageBox(_T("Файл успешно сохранен!"));
+		}
+		catch (const std::exception& e) {
+			AfxMessageBox(CString("Ошибка сохранения: ") + e.what());
+		}
+	}
+}
+
 void CMFCAppView::OnDraw(CDC* pDC) {
 	CMFCAppDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc) return;
 
+	CFont font;
+	font.CreatePointFont(100, _T("Arial"));
+	CFont* pOldFont = pDC->SelectObject(&font);
+
+	CRect rect;
+	GetClientRect(&rect);
 	int y = 20;
-	for (const auto& entry : pDoc->GetGraph().getAdjacencyList()) {
-		int v = entry.first;
-		const auto& neighbors = entry.second;
 
+	// Отрисовка исходного графа
+	pDC->SetTextColor(RGB(0, 0, 0));
+	pDC->TextOut(10, y, _T("Исходный граф:"));
+	y += 30;
+
+	for (const auto& [vertex, neighbors] : pDoc->GetGraph().getAdjacencyList()) {
 		CString str;
-		str.Format(_T("Вершина %d:"), v);
-		pDC->TextOut(10, y, str);
-		y += 20;
+		str.Format(_T("Вершина %d:"), vertex);
+		pDC->TextOut(20, y, str);
 
+		CString connections;
 		for (int n : neighbors) {
-			str.Format(_T("    Связана с %d"), n);
-			pDC->TextOut(30, y, str);
+			CString temp;
+			temp.Format(_T("%d "), n);
+			connections += temp;
+		}
+		pDC->TextOut(40, y + 20, connections);
+		y += 40;
+	}
+
+	// Отрисовка остовного дерева
+	if (pDoc->HasSpanningTree()) {
+		y += 40;
+		pDC->SetTextColor(RGB(0, 0, 255));
+		pDC->TextOut(10, y, _T("Остовное дерево:"));
+		y += 30;
+
+		for (const auto& edge : pDoc->GetSpanningTree()) {
+			CString str;
+			str.Format(_T("%d - %d"), edge.first, edge.second);
+			pDC->TextOut(20, y, str);
 			y += 20;
 		}
 	}
+
+	pDC->SelectObject(pOldFont);
 }
 #endif //_DEBUG
 
